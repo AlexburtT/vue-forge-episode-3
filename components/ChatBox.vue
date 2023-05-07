@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { Message, User } from "~~/types";
+import {nanoid} from "nanoid";
 
 const props = defineProps<{
     messages: Message[],
@@ -8,11 +9,26 @@ const props = defineProps<{
     userTyping?: User[]
 }>();
 
+const emit = defineEmits<{
+    (event: 'newMessage', newMessage: Message): void;
+}>();
+
 function getUser(userId: string) {
     return props.users.find(user => user.id === userId);
 }
 
 const isOpen = ref(true);
+
+const textMessage = ref('');
+function sendMessage() {
+    emit('newMessage', {
+        id: nanoid(),
+        userId: props.me.id,
+        createdAt: new Date(),
+        text: textMessage.value
+    });
+    textMessage.value = '';
+}
 </script>
 
 <template>
@@ -37,11 +53,17 @@ const isOpen = ref(true);
                   :key="message.id"
                   :user="getUser(message.userId)"
                   :message="message"
+                  :is-mine="me.id === message.userId"
               />
           </div>
 
           <footer class="p-2">
-              <input type="text" placeholder="Type you message" class="input w-full block"/>
+              <input
+                  type="text"
+                  v-model="textMessage"
+                  @keypress.enter.exact.prevent="sendMessage"
+                  placeholder="Type you message"
+                  class="input w-full block"/>
           </footer>
       </div>
   </div>
