@@ -13,14 +13,12 @@ const emit = defineEmits<{
     (event: 'newMessage', newMessage: Message): void;
 }>();
 
-function getUser(userId: string) {
-    return props.users.find(user => user.id === userId);
-}
+const getUser = (userId: string) => props.users.find(user => user.id === userId);
 
 const isOpen = ref(true);
 
 const textMessage = ref('');
-function sendMessage() {
+const sendMessage = () => {
     emit('newMessage', {
         id: nanoid(),
         userId: props.me.id,
