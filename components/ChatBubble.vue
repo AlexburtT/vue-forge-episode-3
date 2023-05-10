@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { Message, User } from "~~/types";
-  //@ts-expect-error: no types
+  // @ts-expect-error
   import Markdown from "vue3-markdown-it";
 
   const props = defineProps<{
