@@ -6,14 +6,37 @@ const props = defineProps<{
     messages: Message[],
     users: User[],
     me: User,
-    userTyping?: User[]
+    usersTyping?: User[]
 }>();
+
+const usersTypingText = computed(() => {
+    //TODO filter array of Users
+    if (!props.usersTyping?.length) return ``;
+
+    if (props.usersTyping.length === 1) {
+        return`User ${props.usersTyping[0].name} is typing...`;
+    }
+
+    if (props.usersTyping.length > 3) {
+        return `${props.usersTyping.length} people are typing...`;
+    }
+
+    return `${props.usersTyping.map(user => user.name).join(' and ')} art typing...`;
+});
 
 const emit = defineEmits<{
     (event: 'newMessage', newMessage: Message): void;
 }>();
 
 const getUser = (userId: string) => props.users.find(user => user.id === userId);
+
+const messageBox = ref<HTMLElement>();
+watch(() => props.messages.length, async () => {
+    await nextTick();
+    if (messageBox.value) {
+        messageBox.value.scrollTop = messageBox.value?.scrollHeight;
+    }
+});
 
 const isOpen = ref(true);
 
@@ -45,7 +68,8 @@ const sendMessage = () => {
               </button>
           </header>
 
-          <div class="messages p-4 overflow-y-scroll max-h-[80vh]">
+          <div ref="messageBox"
+              class="messages p-4 overflow-y-scroll max-h-[80vh]">
               <ChatBubble
                   v-for="message in messages"
                   :key="message.id"
@@ -53,9 +77,15 @@ const sendMessage = () => {
                   :message="message"
                   :is-mine="me.id === message.userId"
               />
+
+              <ChatBubble v-for="user in usersTyping" :user="user">
+                  <AppLoading />
+              </ChatBubble>
           </div>
 
           <footer class="p-2">
+              <div v-if="usersTyping?.length > 0"
+                  class="h-6 px-2 text-sm italic">{{ usersTypingText }}</div>
               <input
                   type="text"
                   v-model="textMessage"
