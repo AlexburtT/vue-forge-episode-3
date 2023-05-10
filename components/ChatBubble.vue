@@ -1,15 +1,15 @@
 <script lang="ts" setup>
   import { Message, User } from "~~/types";
-  //@ts-expect-error: no types
+  // @ts-expect-error
   import Markdown from "vue3-markdown-it";
 
   const props = defineProps<{
       user?: User,
-      message: Message,
+      message?: Message,
       isMine?: boolean
   }>();
 
-  const realTime = useTimeAgo(() => props.message.createdAt);
+  const realTime = useTimeAgo(() => props.message?.createdAt ?? new Date());
 </script>
 
 <template>
@@ -22,14 +22,15 @@
 
       </div>
 
-      <div class="chat-header">
+      <div class="chat-header text-xs opacity-50 mb-2">
           <strong>{{ user?.name }}</strong>
           &nbsp;
-          <time>{{ realTime }}</time>
+          <time v-if="message">{{ realTime }}</time>
       </div>
 
       <div class="chat-bubble max-w-max w-full prose prose-sm py-0">
-          <Markdown :source="message.text" class="w-full" />
+          <Markdown v-if="message" :source="message.text" class="w-full" />
+          <slot v-else />
       </div>
   </div>
 </template>
