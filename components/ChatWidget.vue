@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {nanoid} from "nanoid";
-import {Message, User} from "~~/types";
+import { nanoid } from "nanoid";
+import { Message, User } from "~~/types";
+import { fetchWithTimeout } from "~/utils";
 
 const me = ref<User>({
     id: "user",
@@ -26,7 +27,7 @@ async function handleNewMessage(message: Message) {
     messages.value.push(message);
     usersTyping.value.push(bot.value);
     try {
-        const res = await $fetch('/api/ai', {
+        const res = await fetchWithTimeout('/api/ai', {
             method: 'POST',
             body: {
                 message: message.text,
