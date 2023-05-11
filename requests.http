@@ -1,4 +1,4 @@
-### Open AI Chat API 
+### Open AI Chat API
 POST https://api.openai.com/v1/chat/completions
 Content-Type: application/json
 Authorization: Bearer {{$dotenv NUXT_OPENAI_API_KEY}}

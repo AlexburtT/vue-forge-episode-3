@@ -28,7 +28,7 @@
           <time v-if="message">{{ realTime }}</time>
       </div>
 
-      <div class="chat-bubble max-w-max w-full prose prose-sm py-0">
+      <div class="chat-bubble max-w-max w-full prose prose-sm py-0 text-white">
           <Markdown v-if="message" :source="message.text" class="w-full" />
           <slot v-else />
       </div>
