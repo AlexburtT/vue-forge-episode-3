@@ -14,14 +14,14 @@ const usersTypingText = computed(() => {
     if (!props.usersTyping?.length) return ``;
 
     if (props.usersTyping.length === 1) {
-        return`User ${props.usersTyping[0].name} is typing...`;
+        return`User ${props.usersTyping[0].name} пишет...`;
     }
 
     if (props.usersTyping.length > 3) {
-        return `${props.usersTyping.length} people are typing...`;
+        return `${props.usersTyping.length} люди пишут...`;
     }
 
-    return `${props.usersTyping.map(user => user.name).join(' and ')} art typing...`;
+    return `${props.usersTyping.map(user => user.name).join(' and ')} пишется...`;
 });
 
 const emit = defineEmits<{
@@ -38,7 +38,7 @@ watch(() => props.messages.length, async () => {
     }
 });
 
-const isOpen = ref(true);
+const isOpen = ref(false);
 
 const textMessage = ref('');
 const sendMessage = () => {
@@ -62,7 +62,7 @@ const sendMessage = () => {
       </button>
 
       <div v-if="isOpen" class="box bg-gray-300 rounded w-[450px]">
-          <header class="bg-gray-200 px-4 flex justify-between items-center">Customer Chat
+          <header class="bg-gray-200 px-4 flex justify-between items-center">Чат с ИИ
               <button class="p-4 pr-0" @click="isOpen = false">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"/></svg>
               </button>
@@ -90,7 +90,7 @@ const sendMessage = () => {
                   type="text"
                   v-model="textMessage"
                   @keypress.enter.exact.prevent="sendMessage"
-                  placeholder="Type you message"
+                  placeholder="Напишите свой вопрос"
                   class="input w-full block"/>
           </footer>
       </div>
