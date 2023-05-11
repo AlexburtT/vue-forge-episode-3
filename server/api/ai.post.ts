@@ -1,4 +1,4 @@
-import {$openai, newClient} from "~/server/utils/openai";
+import { $openai } from "~/server/utils/openai";
 
 const storage = useStorage();
 export default defineEventHandler(async (event) => {
